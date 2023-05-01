@@ -5,14 +5,61 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Пицца</title>
+    <link rel="icon" href="https://www.oazi.ru/image/cache/catalog/svg2/pizza-21x21.svg">
     <link rel="stylesheet" href="/src/assets/styles/style.css">
 </head>
 <body>
-<div class="test" style="color: blue">
-    test
+
+<div class = "pizza">
+    <div class = "types">
+        <a class = "type">
+            <div>
+                <img id="bavarian" src = "https://dodopizza-a.akamaihd.net/static/Img/Products/3a948b9d5af14d219e2c54282229755a_366x366.webp" alt="Баварская"/>
+                <p>Баварская</p>
+            </div>
+        </a>
+        <a class = "type">
+            <div>
+                <img src = "https://dodopizza-a.akamaihd.net/static/Img/Products/748949429e25404ea10aab002c910d84_366x366.webp" alt="Маргарита"/>
+                <p>Маргарита</p>
+            </div>
+        </a>
+        <a class = "type">
+            <div>
+                <img src = "https://dodopizza-a.akamaihd.net/static/Img/Products/fb9cc5b8ff2e47bdbcbdcb5930cddf06_366x366.webp" alt="Пепперони"/>
+                <p>Пепперони</p>
+            </div>
+        </a>
+    </div>
+    <div class = "pizza2">
+        <h1>Выберите размер</h1>
+        <div class = "size">
+            <button class = "active" id="small">Маленькая</button>
+            <button id = "big">Большая</button>
+        </div>
+        <h2>Добавить по вкусу</h2>
+        <div class = "toppings">
+            <a class = "topping">
+                <img src = "https://dodopizza-a.akamaihd.net/static/Img/Ingredients/bd896a42a5b44169ae9dfdc2573c34f2.png" alt="topping"/>
+                <p>Сырный бортик</p>
+                <span class = "price">0 ₽</span>
+            </a>
+            <a class = "topping">
+                <img src = "https://dodopizza-a.akamaihd.net/static/Img/Ingredients/cdea869ef287426386ed634e6099a5ba.png" alt="topping"/>
+                <p>Сливочная моцарелла</p>
+                <span class = "price">0 ₽</span>
+            </a>
+            <a class = "topping">
+                <img src = "https://dodopizza-a.akamaihd.net/static/Img/Ingredients/000D3A22FA54A81411E9AFA69C1FE796" alt="topping"/>
+                <p>Чеддер и пармезан</p>
+                <span class = "price">0 ₽</span>
+            </a>
+        </div>
+        <button id = "basket">Добавить в корзину за 0 ₽ (0 кКалл)</button>
+    </div>
 </div>
 
-<script src="index.js"></script>
+<script type = "module" src="main.js"></script>
 </body>
 </html>
