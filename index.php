@@ -1,133 +1,100 @@
 <?php
 
-//1
-echo "ЗАДАНИЕ 1. <br>";
-$i = 0;
-
-do {
-    if ($i % 2 === 1) {
-        echo "$i - нечётное число.<br>";
-    }
-    elseif ($i % 2 === 0 and $i > 0) {
-        echo "$i - чётное число.<br>";
-    }
-    else {
-        echo "$i - это ноль.<br>";
-    }
-    $i++;
-} while ($i <= 10);
+//1 (статично объявлено в html)
+//echo file_get_contents('./index.html');
 
 
 //2
-echo "<br>ЗАДАНИЕ 2. <br>";
+const DIR_IMG = './gallery';
 
-$array = [];
-$array[] = [
-    'область' => 'Тюменская область : ',
-    'города' => 'Тюмень, ', 'Тобольск, ', 'Заводоуковск, ', 'Ялуторовск, ', 'Ишим<br>'
-];
-$array[] = [
-    'область' => 'ХМАО : ',
-    'города' => 'Сургут, ', 'Нижневартовск, ', 'Ханты-Мансийск, ', 'Нефтеюганск, ', 'Когалым, ', 'Пыть-Ях<br>'
-];
-$array[] = [
-    'область' => 'Свердловская область : ',
-    'города' => 'Екатеринбург, ', 'Богданович, ', 'Тавда, ', '	Нижний Тагил, ', 'Туринск, ', 'Каменск-Уральский<br>'
-];
-
-foreach ($array as $key => $value) {
-    if (is_array($value)) {
-        foreach ($value as $new_key => $new_value) {
-            echo $new_value;
-        }
-    }
+function renderTemplate($page, $arrImg = [], $arrHtml = []) {
+    ob_start();
+    include $page . ".php";
+    return ob_get_clean();
 }
 
-
-//3
-echo "<br>ЗАДАНИЕ 3. <br>";
-
-$alphabet = [
-    'a' => 'a',
-    'б' => 'b',
-    'в' => 'v',
-    'г' => 'g',
-    'д' => 'd',
-    'е' => 'e',
-    'ё' => 'yo',
-    'ж' => 'zh',
-    'з' => 'z',
-    'и' => 'i',
-    'й' => 'j',
-    'к' => 'k',
-    'л' => 'l',
-    'м' => 'm',
-    'н' => 'n',
-    'о' => 'o',
-    'п' => 'p',
-    'р' => 'r',
-    'с' => 's',
-    'т' => 't',
-    'у' => 'u',
-    'ф' => 'f',
-    'х' => 'x',
-    'ц' => 'cz',
-    'ч' => 'ch',
-    'ш' => 'sh',
-    'щ' => 'shh',
-    'ъ' => '',
-    'ы' => 'y',
-    'ь' => '',
-    'э' => 'e',
-    'ю' => 'yu',
-    'я' => 'ya'
-];
-$text = 'Программирование';
-
-$new_text = strtr(mb_strtolower($text), $alphabet);
-echo "$new_text<br>";
-
-
-//4
-echo "<br>ЗАДАНИЕ 4. <br>";
-
-$menu = [
-    'Главная',
-    'Меню' => [
-        'Салаты',
-        'Горячее',
-        'Пицца',
-        'Десерты'
-    ],
-    'Контакты'
-];
-
-echo '<ul>';
-foreach ($menu as $key => $value) {
-    if (is_array($value)) {
-        echo '<li>' . $key . '<ul>';
-        foreach ($value as $new_value) {
-            echo '<li>' . $new_value . '</li>';
-        }
-        echo '</ul>' . '</li>';
-    }
-    else {
-        echo '<li>' . $value . '</li>';
-    }
-}
-echo '</ul>';
-
-
-//6
-echo "<br>ЗАДАНИЕ 6. <br>";
-
-foreach ($array as $key => $value) {
-    if (is_array($value)) {
-        foreach ($value as $new_key => $new_value) {
-            if (mb_substr($new_value, 0,1) == 'К') {
-                echo $new_value;
+function renderArr() {
+    $arr = [];
+    $scanDir = scandir(DIR_IMG);
+    for ($i = 0; $i < count($scanDir); $i++) {
+        if (strlen($scanDir[$i]) > 2) {
+            $scanDirImg = scanDir(DIR_IMG . "/" . $scanDir[$i]);
+            for ($j = 0; $j < count($scanDirImg); $j++) {
+                if (strlen($scanDirImg[$j]) > 2) {
+                    $arr[$i - 2][$j - 2] = DIR_IMG . "/" . $scanDir[$i] . "/" . $scanDirImg[$j];
+                }
             }
         }
     }
+    return $arr;
 }
-echo '<br>';
+
+$arrImg = renderArr();
+$gallery = renderTemplate('gallery', $arrImg);
+$arrHtml = array($gallery);
+
+echo renderTemplate('main', $arrImg, $arrHtml);
+
+
+//3
+if (!empty($_FILES)) {
+    $path = "gallery/small/" . $_FILES["myFile"]["name"];
+
+    if ($_FILES["myFile"]["size"] > 5*1024*1024) {
+        echo "Размер файла не должен превышать 5 мб";
+        exit;
+    }
+
+    //проверку на тип файла не делала, так как сразу указала расширение в input
+
+    if (move_uploaded_file($_FILES["myFile"]["tmp_name"], $path)) {
+        echo $message = "Файл загружен";
+        $image = imagecreatefromjpeg($path);
+        imagejpeg($image, "gallery/big/" . $_FILES["myFile"]["name"]);
+    } else {
+        echo $message = "Ошибка загрузки";
+    }
+}
+?>
+
+    <!DOCTYPE html>
+    <html lang="ru">
+
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+    <div class="add">
+        <form method="post" enctype="multipart/form-data">
+            <input id="file" type="file" name="myFile" accept="image/jpg, image/jpeg">
+            <input id="submit" type="submit" value="Загрузить">
+        </form>
+    </div>
+    </body>
+
+    </html>
+<?php
+
+//4и5
+$day = date('G:i:s d:m:Y');
+
+function logging($day) {
+    if (file_exists("log.txt")) {
+        $countRecord = count(file("log.txt"));
+        if ($countRecord < 10) {
+            file_put_contents("log.txt", $day . PHP_EOL, FILE_APPEND);
+        }
+        else {
+            file_put_contents("countLog.txt", "Создан новый log файл," . PHP_EOL, FILE_APPEND);
+            $numberOfFileLog = count(file("countLog.txt"));
+            rename("log.txt", "log{$numberOfFileLog}.txt");
+        }
+    }
+    else {
+        file_put_contents('log.txt', $day . PHP_EOL, FILE_APPEND);
+    }
+}
+logging($day);
