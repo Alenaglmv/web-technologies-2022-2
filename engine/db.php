@@ -3,7 +3,7 @@
 define("HOST", "localhost:3306");
 define("USER", "root");
 define("PASS", "");
-define("DB", "lesson20");
+define("DB", "lesson21");
 
 function getDb() {
     static $db = null;
@@ -27,5 +27,11 @@ function getAssocResult($sql) {
     }
 
     return $array_result;
+}
+
+function executeSql($sql) {
+    mysqli_query(getDb(), $sql) or die(mysqli_error(getDb()));
+
+    return mysqli_affected_rows(getDb());
 }
 
